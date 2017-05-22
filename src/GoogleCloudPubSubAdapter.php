@@ -30,21 +30,29 @@ class GoogleCloudPubSubAdapter implements PubSubAdapterInterface
     protected $autoCreateSubscriptions;
 
     /**
+     * @var int
+     */
+    protected $maxMessages;
+
+    /**
      * @param PubSubClient $client
      * @param string $clientIdentifier
      * @param bool $autoCreateTopics
      * @param bool $autoCreateSubscriptions
+     * @param int $maxMessages
      */
     public function __construct(
         PubSubClient $client,
         $clientIdentifier = null,
         $autoCreateTopics = true,
-        $autoCreateSubscriptions = true
+        $autoCreateSubscriptions = true,
+        $maxMessages = 5
     ) {
         $this->client = $client;
         $this->clientIdentifier = $clientIdentifier;
         $this->autoCreateTopics = $autoCreateTopics;
         $this->autoCreateSubscriptions = $autoCreateSubscriptions;
+        $this->maxMessages = $maxMessages;
     }
 
     /**
@@ -137,7 +145,7 @@ class GoogleCloudPubSubAdapter implements PubSubAdapterInterface
 
         while ($isSubscriptionLoopActive) {
             $messages = $subscription->pull([
-                'maxMessages' => 4,
+                'maxMessages' => $this->maxMessages,
                 'returnImmediately' => true,
                 'grpcOptions' => [
                     'timeoutMillis' => null,
