@@ -137,7 +137,7 @@ class GoogleCloudPubSubAdapter implements PubSubAdapterInterface
 
         while ($isSubscriptionLoopActive) {
             $messages = $subscription->pull([
-                'maxMessages' => 5,
+                'maxMessages' => 4,
                 'returnImmediately' => true,
                 'grpcOptions' => [
                     'timeoutMillis' => null,
