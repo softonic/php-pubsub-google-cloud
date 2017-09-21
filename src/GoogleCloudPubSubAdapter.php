@@ -156,13 +156,17 @@ class GoogleCloudPubSubAdapter implements PubSubAdapterInterface
                 /** @var Message $message */
                 $payload = Utils::unserializeMessagePayload($message->data());
 
+                $result = true;
+
                 if ($payload === 'unsubscribe') {
                     $isSubscriptionLoopActive = false;
                 } else {
-                    call_user_func($handler, $payload);
+                    $result = call_user_func($handler, $payload);
                 }
-
-                $subscription->acknowledge($message);
+                
+                if (empty($result) || true == $result) {
+                    $subscription->acknowledge($message);
+                }
             }
         }
     }
