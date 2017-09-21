@@ -164,7 +164,7 @@ class GoogleCloudPubSubAdapter implements PubSubAdapterInterface
                     $result = call_user_func($handler, $payload);
                 }
                 
-                if (empty($result) || true == $result) {
+                if (false !== $result) {
                     $subscription->acknowledge($message);
                 }
             }
