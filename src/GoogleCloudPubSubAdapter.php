@@ -35,6 +35,11 @@ class GoogleCloudPubSubAdapter implements PubSubAdapterInterface
     protected $maxMessages;
 
     /**
+     * @var array
+     */
+    protected $restOptions;
+
+    /**
      * @param PubSubClient $client
      * @param string $clientIdentifier
      * @param bool $autoCreateTopics
@@ -46,13 +51,15 @@ class GoogleCloudPubSubAdapter implements PubSubAdapterInterface
         $clientIdentifier = null,
         $autoCreateTopics = true,
         $autoCreateSubscriptions = true,
-        $maxMessages = 5
+        $maxMessages = 5,
+        array $restOptions = []
     ) {
         $this->client = $client;
         $this->clientIdentifier = $clientIdentifier;
         $this->autoCreateTopics = $autoCreateTopics;
         $this->autoCreateSubscriptions = $autoCreateSubscriptions;
         $this->maxMessages = $maxMessages;
+        $this->restOptions = $restOptions;
     }
 
     /**
@@ -150,6 +157,7 @@ class GoogleCloudPubSubAdapter implements PubSubAdapterInterface
                 'grpcOptions' => [
                     'timeoutMillis' => null,
                 ],
+                'restOptions' => $this->restOptions
             ]);
 
             foreach ($messages as $message) {
